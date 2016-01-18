@@ -81,6 +81,8 @@
 //***************   POLYMORPHISM   ****************
 //*************************************************
 
+var mountains = require('./06_object/code/mountains.js');
+
 // Compute arrays of minimum column widths and row
 // heights for a grid of cells.
 function rowHeights(rows) {
@@ -152,18 +154,123 @@ TextCell.prototype.draw = function(width, height) {
 };
 
 // Let's use all this to build a checkerboard.
-var rows = [];
-for (var i = 0; i < 5; i++) {
-	var row = [];
-	for (var j = 0; j < 5; j++) {
-		if ((j + i) % 2 == 0)
-			row.push(new TextCell('##'));
-		else
-			row.push(new TextCell('  '));
-	}
-	rows.push(row);
+// var rows = [];
+// for (var i = 0; i < 5; i++) {
+// 	var row = [];
+// 	for (var j = 0; j < 5; j++) {
+// 		if ((j + i) % 2 == 0)
+// 			row.push(new TextCell('##'));
+// 		else
+// 			row.push(new TextCell('  '));
+// 	}
+// 	rows.push(row);
+// }
+// console.log(drawTable(rows));
+
+//Highlight the top row by underlining the column names.
+function UnderlinedCell(inner) {
+	this.inner = inner;
 }
-console.log(drawTable(rows));
+
+UnderlinedCell.prototype.minWidth = function() {
+	return this.inner.minWidth();
+};
+UnderlinedCell.prototype.minHeight = function() {
+	return this.inner.minHeight() + 1;
+};
+UnderlinedCell.prototype.draw = function(width,height) {
+	return this.inner.draw(width, height - 1)
+	.concat([repeat('-', width)]);
+};
+
+function dataTable(data) {
+	var keys = Object.keys(data[0]);
+	var headers = keys.map(function(name) {
+		return new UnderlinedCell(new TextCell(name));
+	});
+	var body = data.map(function(row) {
+		return keys.map(function(name) {
+			return new TextCell(String(row[name]));
+		});
+	});
+	return [headers].concat(body);
+}
+
+// console.log(drawTable(dataTable(mountains)));
+
+//*************************************************
+//************** GETTERS & SETTERS ****************
+//*************************************************
+
+
+// get and set notation for properties allows you to
+// specify a function to be run when the property is
+// read or written. You can also use Object.defineProperty
+// to add such a property to an existing object.
+var pile = {
+	elements: ['eggshell', 'orange peel', 'worm'],
+	get height() {
+		return this.elements.length;
+	},
+	set height(value) {
+		console.log('Ignoring attempt to set height to', value);
+	}
+};
+
+console.log(pile.height);
+pile.height = 100;
+
+
+Object.defineProperty(TextCell.prototype, "heightProp", {
+	get: function() {return this.text.length; }
+});
+
+var cell = new TextCell('no\nway');
+console.log(cell.heightProp);
+
+// If a getter is set but a setter is not, attempts
+// to write to the property are simply ignored.
+cell.heightProp = 100;
+console.log(cell.heightProp);
+
+//*************************************************
+//***************** INHERITANCE *******************
+//*************************************************
+
+// RTextCell is basically the same as TextCell, except
+// its draw method contains a different function.
+// This pattern is called 'inheritance'.
+function RTextCell(text) {
+	TextCell.call(this, text);
+}
+
+RTextCell.prototype = Object.create(TextCell.prototype);
+RTextCell.prototype.draw = function(width, height) {
+	var result = [];
+	for (var i = 0, i < height; i++) {
+		var line = this.text[i] || '';
+		result.push(repeat(' ', width - line.length) + line);
+	}
+	return result;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
