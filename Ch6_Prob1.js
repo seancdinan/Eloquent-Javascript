@@ -9,11 +9,45 @@
 // computes the length of the vector -- that is, the distance
 // of the point (x, y) from the origin (0, 0).
 
-function Vector(x,y) {
+// Define the Vector Constructor.
+function Vector(x, y) {
 	this.x = x;
 	this.y = y;
 }
 
-var vector = new Vector(12,20);
+// Create 2 functions to add or subtract respectively.
+Vector.prototype.plus = function(newVector) {
+	var xSum = this.x + newVector.x;
+	var ySum = this.y + newVector.y;
+	return new Vector(xSum, ySum);
+}
+Vector.prototype.minus = function(newVector) {
+	var xSum = this.x - newVector.x;
+	var ySum = this.y - newVector.y;
+	return new Vector(xSum, ySum); 
+}
 
-console.log(vector.x)
+// Make a getter fxn to calculate length from a vector
+// and the origin (0,0);
+Object.defineProperty(Vector.prototype, 'length', {
+	get: function() { 
+		var dist = Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
+		return dist;
+	}
+});
+
+
+// Test em out & print the results.
+var vector = new Vector(12,20);
+var tester = new Vector(10,4);
+var adder  = vector.plus(tester);
+var subber = vector.minus(tester);
+
+console.log(vector);
+console.log(tester);
+console.log('***********************')
+console.log(adder);
+console.log(subber);
+console.log('***********************');
+console.log(vector.length);
+console.log(tester.length);
