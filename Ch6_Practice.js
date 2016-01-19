@@ -183,18 +183,18 @@ UnderlinedCell.prototype.draw = function(width,height) {
 	.concat([repeat('-', width)]);
 };
 
-function dataTable(data) {
-	var keys = Object.keys(data[0]);
-	var headers = keys.map(function(name) {
-		return new UnderlinedCell(new TextCell(name));
-	});
-	var body = data.map(function(row) {
-		return keys.map(function(name) {
-			return new TextCell(String(row[name]));
-		});
-	});
-	return [headers].concat(body);
-}
+// function dataTable(data) {
+// 	var keys = Object.keys(data[0]);
+// 	var headers = keys.map(function(name) {
+// 		return new UnderlinedCell(new TextCell(name));
+// 	});
+// 	var body = data.map(function(row) {
+// 		return keys.map(function(name) {
+// 			return new TextCell(String(row[name]));
+// 		});
+// 	});
+// 	return [headers].concat(body);
+// }
 
 // console.log(drawTable(dataTable(mountains)));
 
@@ -207,18 +207,18 @@ function dataTable(data) {
 // specify a function to be run when the property is
 // read or written. You can also use Object.defineProperty
 // to add such a property to an existing object.
-var pile = {
-	elements: ['eggshell', 'orange peel', 'worm'],
-	get height() {
-		return this.elements.length;
-	},
-	set height(value) {
-		console.log('Ignoring attempt to set height to', value);
-	}
-};
+// var pile = {
+// 	elements: ['eggshell', 'orange peel', 'worm'],
+// 	get height() {
+// 		return this.elements.length;
+// 	},
+// 	set height(value) {
+// 		console.log('Ignoring attempt to set height to', value);
+// 	}
+// };
 
-console.log(pile.height);
-pile.height = 100;
+// console.log(pile.height);
+// pile.height = 100;
 
 
 Object.defineProperty(TextCell.prototype, "heightProp", {
@@ -230,8 +230,8 @@ console.log(cell.heightProp);
 
 // If a getter is set but a setter is not, attempts
 // to write to the property are simply ignored.
-cell.heightProp = 100;
-console.log(cell.heightProp);
+// cell.heightProp = 100;
+// console.log(cell.heightProp);
 
 //*************************************************
 //***************** INHERITANCE *******************
@@ -247,22 +247,32 @@ function RTextCell(text) {
 RTextCell.prototype = Object.create(TextCell.prototype);
 RTextCell.prototype.draw = function(width, height) {
 	var result = [];
-	for (var i = 0, i < height; i++) {
+	for (var i = 0; i < height; i++) {
 		var line = this.text[i] || '';
 		result.push(repeat(' ', width - line.length) + line);
 	}
 	return result;
 };
 
+function dataTable(data) {
+	var keys = Object.keys(data[0]);
+	var headers = keys.map(function(name) {
+		return new UnderlinedCell(new TextCell(name));
+	});
+	var body = data.map(function(row) {
+		return keys.map(function(name) {
+			var value = row[name];
+			//This was changed:
+			if (typeof value == 'number')
+				return new RTextCell(String(value));
+			else
+				return new TextCell(String(value));
+		});
+	});
+	return [headers].concat(body);
+}
 
-
-
-
-
-
-
-
-
+// console.log(drawTable(dataTable(mountains)));
 
 
 
