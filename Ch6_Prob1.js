@@ -51,3 +51,4 @@ console.log(subber);
 console.log('***********************');
 console.log(vector.length);
 console.log(tester.length);
+console.log('***********************');
