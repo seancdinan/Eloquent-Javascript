@@ -17,3 +17,29 @@
 // 5. Implement an object type 'RangeSeq' that iterates
 //	  over a range of integers (taking 'from' and 'to'
 //		arguments to its constructor) instead.
+
+function Interface(sequence, action, amount) {
+	this.sequence = sequence; // Specify the sequence of values
+	this.action   = action;   // Specify the function to initiate
+	this.amount   = amount;   // Specify the # of elements to take
+}
+Interface.prototype.runIt = function() {
+
+}
+
+var logFive = function(values) {
+	// Log (at most) the first 5 values of a sequence.
+	if (values.length < 5) {
+		for (var i = 0; i < values.length; i++)
+			console.log(values[i]);
+	}
+	else {
+		for (var i = 0; i < 5; i++)
+			console.log(values[i]);
+	}
+}
+
+
+
+
+testSequence = [1, 2, 3, 4, 5];
