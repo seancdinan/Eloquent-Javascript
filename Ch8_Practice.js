@@ -76,28 +76,65 @@
 // doesn't terminate on its own. The only way to break 
 // out of the loop is when a valid direction is given.
 
-for (;;) {
-	try {
-		var dir = promptDirection('Where?');
-		console.log('You chose: ', dir);
-		break;
-	} catch (e) {
-		console.log('Not a valid direction. Try again.');
-	}
-}
+// for (;;) {
+// 	try {
+// 		var dir = promptDirection('Where?');
+// 		console.log('You chose: ', dir);
+// 		break;
+// 	} catch (e) {
+// 		console.log('Not a valid direction. Try again.');
+// 	}
+// }
 
-// We can define a new type of error and use 'instanceOf'
-// to identify it.
+// // We can define a new type of error and use 'instanceOf'
+// // to identify it.
 
-function InputError(message) {
+// function InputError(message) {
+// 	this.message = message;
+// 	this.stack   = (new Error()).stack;
+// }
+// // The prototype is made to derive from Error.prototype
+// // so that instanceOf Error will also return true for
+// // InputError objects.
+// InputError.prototype = Object.create(Error.prototype);
+// InputError.prototype.name = 'InputError';
+
+//*************************************************
+//***************** Assertions  *******************
+//*************************************************
+	
+function AssertionFailed(message) {
 	this.message = message;
-	this.stack   = (new Error()).stack;
 }
-// The prototype is made to derive from Error.prototype
-// so that instanceOf Error will also return true for
-// InputError objects.
-InputError.prototype = Object.create(Error.prototype);
-InputError.prototype.name = 'InputError';
+AssertionFailed.prototype = Object.create(Error.prototype);
+
+function assert(test, message) {
+	if (!test)
+		throw new AssertionFailed(message);
+}
+
+function lastElement(array) {
+	assert(array.length > 0, 'empty array in lastElement');
+	return array[array.length - 1];
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
